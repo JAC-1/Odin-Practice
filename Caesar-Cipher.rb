@@ -1,7 +1,12 @@
 require 'pry-byebug'
 
 def into_bytes (string)
-  b = string.to_bytes
+  b = string.bytes
+  b.each do |bite|
+    if bite == 32
+      p "space"
+    end
+  end
   p b
 end
 
@@ -9,6 +14,11 @@ end
 
 # end
 
+binding.pry
+
+into_bytes("apples")
+into_bytes("apples and oranges")
 
 
-# binding.pry
+
+
