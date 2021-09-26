@@ -1,31 +1,26 @@
-require 'pry-byebug'
+# require 'pry-byebug'
 
-
+def wrap(bits, mod=2)
+  a = 97
+  b = 122
+  over = (bits + mod) - b
+  a + over
+end
 def encode(string, mod=2)
   b = string.bytes
   z = "z".bytes
   a = "a".bytes
-  p b
- # b.map! {|bit| bit != 32 ? bit + mod : bit}
-  b.map! do |bit|
-    if bit != 32
-      bit += mod
-      if bit > 122
-        start = 96
-        over = 122 - (bit + mod)
-        bit = start + over
-      end
-    else
-      bit = 32
-    end
-  end
+  b.map! {|bit| bit == 32 ? bit : bit + mod}
+  b.map! {|bit| bit > 122 ? wrap(bit) : bit}
   p b
   p "#{z} is z and #{a} is a"
-  p z.pack('c*')
 end
 
-binding.pry
-encode("apples and oranges")
+
+# binding.pry
+p [wrap(123)].unpack('c*')
+p x = "asdf".unpack('c*')
+p x.pack('c*')
 
 
 
