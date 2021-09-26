@@ -1,27 +1,34 @@
 # require 'pry-byebug'
 
-def wrap(bits, mod=2)
-  a = 97
+def wrap_lower(byte)
+  a = 96
   b = 122
-  over = (bits + mod) - b
+  over = byte - b
   a + over
 end
+
+def wrap_upper(byte)
+  a = 64
+  z = 90
+  over = byte - z 
+  a + over
+end
+
 def encode(string, mod=2)
   b = string.bytes
-  z = "z".bytes
-  a = "a".bytes
   b.map! {|bit| bit == 32 ? bit : bit + mod}
-  b.map! {|bit| bit > 122 ? wrap(bit) : bit}
-  p b
-  p "#{z} is z and #{a} is a"
+  b.map! {|bit| bit > 122 ? wrap_upper(bit) : bit}
+  bad_char_range = (91..96)
+  b.map! {|bit| bad_char_range.any?(bit) ? wrap_lower(bit) : bit}
+  return b
 end
 
 
 # binding.pry
-p [wrap(123)].unpack('c*')
-p x = "asdf".unpack('c*')
-p x.pack('c*')
-
-
-
+puts "Give me a super secret message to encode"
+string = gets.chomp
+puts "Great, now give me a integer for the shift"
+encoding = gets.chomp
+puts "Thank you, your encoded message is: "
+p encode(string, 5).pack('C*')
 
